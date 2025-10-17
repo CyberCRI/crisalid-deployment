@@ -38,8 +38,9 @@ apollo:
       APP_ENV: DEV
       NEO4J_URI: bolt://neo4j:{{ .Values.neo4j.boltPort }}
       NEO4J_USER: "{{ .Values.neo4j.username }}"
-      NEO4J_PASSWORD: "{{ .Values.neo4j.password }}"
       ENABLE_API_KEYS: false
+    sensitive:
+      NEO4J_PASSWORD: "{{ .Values.neo4j.password }}"
       # API_KEYS: ${SOVISUPLUS_GRAPHQL_API_KEY}
 
 crisalidBus:
