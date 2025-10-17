@@ -27,8 +27,6 @@ spec:
         ports:
           - containerPort: {{ .Values.apollo.httpPort }}
             name: http
-          - containerPort: {{ .Values.apollo.boltPort }}
-            name: bolt
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.apollo.fullName $ }}

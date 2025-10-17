@@ -27,6 +27,8 @@ spec:
         ports:
           - containerPort: {{ .Values.neo4j.httpPort }}
             name: http
+          - containerPort: {{ .Values.neo4j.boltPort }}
+            name: bolt
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.neo4j.fullName $ }}
