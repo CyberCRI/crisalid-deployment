@@ -57,7 +57,6 @@ crisalidBus:
     nonSensitive:
       RABBITMQ_DEFAULT_USER: user
       # API_KEYS: ${SOVISUPLUS_GRAPHQL_API_KEY}
-  
   livenessProbe:
     exec:
       command:
