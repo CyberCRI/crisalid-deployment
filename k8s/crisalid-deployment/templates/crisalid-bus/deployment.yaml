@@ -2,38 +2,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ tpl .Values.apollo.fullName $ }}
+  name: {{ tpl .Values.crisalidBus.fullName $ }}
   labels:
-    {{- (tpl ($.Values.apollo.commonLabels | toYaml ) $) | nindent 4 }}
+    {{- (tpl ($.Values.crisalidBus.commonLabels | toYaml ) $) | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- (tpl ($.Values.apollo.commonLabels | toYaml ) $) | nindent 6 }}
+      {{- (tpl ($.Values.crisalidBus.commonLabels | toYaml ) $) | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- (tpl ($.Values.apollo.commonLabels | toYaml ) $) | nindent 8 }}
+        {{- (tpl ($.Values.crisalidBus.commonLabels | toYaml ) $) | nindent 8 }}
     spec:
       securityContext:
         {{- include "common.security.podSecurityContext.restricted" dict | nindent 8 }}
 
       containers:
-      - name: apollo
-      {{- with $.Values.apollo.image }}
+      - name: crisalidBus
+      {{- with $.Values.crisalidBus.image }}
         image: {{ tpl (printf "%s:%s" .repository .tag) $ }}
       {{- end }}
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: {{ .Values.apollo.httpPort }}
+          - containerPort: {{ .Values.crisalidBus.httpPort }}
             name: http
 
         envFrom:
         - configMapRef:
-            name: {{ tpl .Values.apollo.fullName $ }}
+            name: {{ tpl .Values.crisalidBus.fullName $ }}
         securityContext:
           {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}
         livenessProbe:
-        {{- .Values.apollo.livenessProbe | toYaml | nindent 10 }}
+        {{- .Values.crisalidBus.livenessProbe | toYaml | nindent 10 }}
         readinessProbe:
-        {{- .Values.apollo.readinessProbe | toYaml | nindent 10 }}
+        {{- .Values.crisalidBus.readinessProbe | toYaml | nindent 10 }}

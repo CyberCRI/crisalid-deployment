@@ -2,20 +2,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ tpl .Values.apollo.fullName $ }}
+  name: {{ tpl .Values.crisalidBus.fullName $ }}
   labels:
-    {{- (tpl ($.Values.apollo.commonLabels | toYaml ) $) | nindent 4 }}
+    {{- (tpl ($.Values.crisalidBus.commonLabels | toYaml ) $) | nindent 4 }}
 
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.apollo.httpPort }}
+    - port: {{ .Values.crisalidBus.httpPort }}
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.apollo.boltPort }}
-      targetPort: bolt
-      protocol: TCP
-      name: bolt
   selector:
-    {{- (tpl ($.Values.apollo.commonLabels | toYaml ) $) | nindent 4 }}
+    {{- (tpl ($.Values.crisalidBus.commonLabels | toYaml ) $) | nindent 4 }}

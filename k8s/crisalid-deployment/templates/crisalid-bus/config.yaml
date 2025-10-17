@@ -1,8 +1,8 @@
 ---
 {{- $configGenerator := dict
-"config" .Values.apollo.config
+"config" .Values.crisalidBus.config
 "root" $
-"commonLabels" .Values.apollo.commonLabels
-"name" (tpl .Values.apollo.fullName .) }}
+"commonLabels" .Values.crisalidBus.commonLabels
+"name" (tpl .Values.crisalidBus.fullName .) }}
 
 {{- include "common.config.resources" $configGenerator}}
