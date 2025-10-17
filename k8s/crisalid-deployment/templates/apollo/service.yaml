@@ -13,9 +13,5 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.apollo.boltPort }}
-      targetPort: bolt
-      protocol: TCP
-      name: bolt
   selector:
     {{- (tpl ($.Values.apollo.commonLabels | toYaml ) $) | nindent 4 }}
