@@ -1,0 +1,8 @@
+---
+{{- $configGenerator := dict
+"config" .Values.apollo.config
+"root" $
+"commonLabels" .Values.apollo.commonLabels
+"name" (tpl .Values.apollo.fullName .) }}
+
+{{- include "common.config.resources" $configGenerator}}

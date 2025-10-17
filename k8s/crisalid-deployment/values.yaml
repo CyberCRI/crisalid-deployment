@@ -1,0 +1,78 @@
+neo4j:
+  fullName: neo4j
+  image:
+    repository: neo4j
+    tag: "5-community"
+    pullPolicy: IfNotPresent
+  httpPort: 7474
+  boltPort: 7687
+  commonLabels:
+    app.kubernetes.io/name: neo4j
+    app.kubernetes.io/part-of: crisalid
+    app.kubernetes.io/managed-by: Helm
+  username: neo4j
+  config:
+    nonSensitive:
+      NEO4J_apoc_export_file_enabled: true
+      NEO4J_apoc_import_file_enabled: true
+      NEO4J_apoc_import_file_use__neo4j__config: true
+      NEO4J_PLUGINS: '[ "apoc" ]'
+      NEO4J_server_memory_heap_initial__size: "512m"
+      NEO4J_server_memory_heap_max__size: "2G"
+      NEO4J_server_memory_pagecache_size: "1G"
+      NEO4J_server_config_strict__validation_enabled: false
+
+apollo:
+  fullName: apollo
+  image:
+    repository: crisalidesr/crisalid-apollo
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  httpPort: 4000
+  commonLabels:
+    app.kubernetes.io/name: apollo
+    app.kubernetes.io/part-of: crisalid
+    app.kubernetes.io/managed-by: Helm
+  config:
+    nonSensitive:
+      APP_ENV: DEV
+      NEO4J_URI: bolt://neo4j:{{ .Values.neo4j.boltPort }}
+      NEO4J_USER: "{{ .Values.neo4j.username }}"
+      NEO4J_PASSWORD: "{{ .Values.neo4j.password }}"
+      ENABLE_API_KEYS: false
+      # API_KEYS: ${SOVISUPLUS_GRAPHQL_API_KEY}
+
+crisalidBus:
+  fullName: crisalid-bus
+  image:
+    repository: rabbitmq:3-management
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  httpPort: 15672
+  commonLabels:
+    app.kubernetes.io/name: crisalid-bus
+    app.kubernetes.io/part-of: crisalid
+    app.kubernetes.io/managed-by: Helm
+  config:
+    nonSensitive:
+      RABBITMQ_DEFAULT_USER: user
+      # API_KEYS: ${SOVISUPLUS_GRAPHQL_API_KEY}
+  
+  livenessProbe:
+    exec:
+      command:
+        - rabbitmq-diagnostics
+        - check_port_connectivity
+    initialDelaySeconds: 30
+    periodSeconds: 1
+    timeoutSeconds: 3
+    failureThreshold: 10
+  readinessProbe:
+    exec:
+      command:
+        - rabbitmq-diagnostics
+        - check_port_connectivity
+    initialDelaySeconds: 10
+    periodSeconds: 1
+    timeoutSeconds: 3
+    failureThreshold: 5
