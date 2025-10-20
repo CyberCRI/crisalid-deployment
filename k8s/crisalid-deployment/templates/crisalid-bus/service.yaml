@@ -13,5 +13,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: {{ .Values.crisalidBus.amqPort }}
+      targetPort: amq
+      protocol: TCP
+      name: amq
   selector:
     {{- (tpl ($.Values.crisalidBus.commonLabels | toYaml ) $) | nindent 4 }}

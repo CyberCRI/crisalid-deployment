@@ -25,9 +25,10 @@ spec:
       {{- end }}
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: {{ .Values.crisalidBus.httpPort }}
-            name: http
-
+        - containerPort: {{ .Values.crisalidBus.httpPort }}
+          name: http
+        - containerPort: {{ .Values.crisalidBus.amqPort }}
+          name: amq
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.crisalidBus.fullName $ }}
@@ -39,3 +40,12 @@ spec:
         {{- .Values.crisalidBus.livenessProbe | toYaml | nindent 10 }}
         readinessProbe:
         {{- .Values.crisalidBus.readinessProbe | toYaml | nindent 10 }}
+        volumeMounts:
+        - name: definitions
+          mountPath: {{ .Values.crisalidBus.definitionsFile }}
+  volumes:
+    - name: definitions
+      configMap:
+        # Provide the name of the ConfigMap containing the files you want
+        # to add to the container
+        name: {{printf "%s-definitions" (tpl .Values.crisalidBus.fullName $) }}

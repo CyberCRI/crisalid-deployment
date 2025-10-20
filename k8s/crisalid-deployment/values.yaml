@@ -45,11 +45,14 @@ apollo:
 
 crisalidBus:
   fullName: crisalid-bus
+  definitionsFile: /etc/rabbitmq/definitions.json
+  defaultPasswordHash: ccZY1+5tVHkoJbmKGXqUmY94e4DT30c/oUd2hSJMNjyhNRGj
   image:
     repository: rabbitmq
     tag: 3-management
     pullPolicy: IfNotPresent
   httpPort: 15672
+  amqPort: 5672
   commonLabels:
     app.kubernetes.io/name: crisalid-bus
     app.kubernetes.io/part-of: crisalid
@@ -57,7 +60,9 @@ crisalidBus:
   config:
     nonSensitive:
       RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit load_definitions {{.Values.crisalidBus.definitionsFile}}
       # API_KEYS: ${SOVISUPLUS_GRAPHQL_API_KEY}
+
   livenessProbe:
     exec:
       command:
@@ -76,3 +81,35 @@ crisalidBus:
     periodSeconds: 1
     timeoutSeconds: 3
     failureThreshold: 5
+
+ikg:
+  fullName: ikg
+  image:
+    repository: crisalidesr/crisalid-ikg
+    tag: v0.24-dev
+  httpPort: 8000
+  commonLabels:
+    app.kubernetes.io/name: crisalid-ikg
+    app.kubernetes.io/part-of: crisalid
+    app.kubernetes.io/managed-by: Helm
+  config:
+    nonSensitive:
+    APP_ENV: DEV
+    API_PREFIX: /api
+    API_VERSION: v1
+    AMQP_ENABLED: true
+    AMQP_HOST: "{{ .Values.crisalidBus.fullName }}"
+    AMQP_PORT: "{{ .Values.crisalidBus.amqPort }}"
+    AMQP_USER: "{{ .Values.crisalidBus.username }}"
+    AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
+    NEO4J_URI: bolt://neo4j:${NEO4J_BOLT_PORT}
+    NEO4J_USER:  #keep empty if NEO4J_AUTH: none
+    NEO4J_PASSWORD:  #keep empty if NEO4J_AUTH: none
+    NEO4J_USER: ${NEO4J_USER}
+    NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+    ES_ENABLED: false
+    ES_HOST: http://localhost
+    ES_PORT: 9200
+    ES_USER: elastic
+    ES_PASSWORD: elastic
+    ORG_REGISTRY_URL: http://crisalid-org-registry:3000
