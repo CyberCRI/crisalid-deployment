@@ -31,6 +31,8 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.crisalidBus.fullName $ }}
+        - secretRef:
+            name: {{ tpl .Values.crisalidBus.fullName $ }}
         securityContext:
           {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}
         livenessProbe:

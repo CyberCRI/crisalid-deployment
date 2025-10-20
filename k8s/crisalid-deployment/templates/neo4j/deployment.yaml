@@ -32,5 +32,7 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.neo4j.fullName $ }}
+        - secretRef:
+            name: {{ tpl .Values.neo4j.fullName $ }}
         securityContext:
           {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}

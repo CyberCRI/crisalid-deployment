@@ -30,5 +30,7 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.apollo.fullName $ }}
+        - secretRef:
+            name: {{ tpl .Values.apollo.fullName $ }}
         securityContext:
           {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}
