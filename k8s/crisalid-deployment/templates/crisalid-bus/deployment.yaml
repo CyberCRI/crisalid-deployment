@@ -43,9 +43,9 @@ spec:
         volumeMounts:
         - name: definitions
           mountPath: {{ .Values.crisalidBus.definitionsFile }}
-  volumes:
-    - name: definitions
-      configMap:
-        # Provide the name of the ConfigMap containing the files you want
-        # to add to the container
-        name: {{printf "%s-definitions" (tpl .Values.crisalidBus.fullName $) }}
+      volumes:
+      - name: definitions
+        configMap:
+          # Provide the name of the ConfigMap containing the files you want
+          # to add to the container
+          name: {{printf "%s-definitions" (tpl .Values.crisalidBus.fullName $) }}
