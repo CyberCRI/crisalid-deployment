@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ tpl .Values.ikg.fullName $ }}
+  labels:
+    {{- (tpl ($.Values.ikg.commonLabels | toYaml ) $) | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- (tpl ($.Values.ikg.commonLabels | toYaml ) $) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- (tpl ($.Values.ikg.commonLabels | toYaml ) $) | nindent 8 }}
+    spec:
+      securityContext:
+        {{- include "common.security.podSecurityContext.restricted" dict | nindent 8 }}
+
+      containers:
+      - name: ikg
+      {{- with $.Values.ikg.image }}
+        image: {{ tpl (printf "%s:%s" .repository .tag) $ }}
+      {{- end }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: {{ .Values.ikg.httpPort }}
+            name: http
+
+        envFrom:
+        - configMapRef:
+            name: {{ tpl .Values.ikg.fullName $ }}
+        securityContext:
+          {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}
+        livenessProbe:
+        {{- .Values.ikg.livenessProbe | toYaml | nindent 10 }}
+        readinessProbe:
+        {{- .Values.ikg.readinessProbe | toYaml | nindent 10 }}

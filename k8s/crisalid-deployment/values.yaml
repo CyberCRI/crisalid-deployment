@@ -101,15 +101,10 @@ ikg:
     AMQP_HOST: "{{ .Values.crisalidBus.fullName }}"
     AMQP_PORT: "{{ .Values.crisalidBus.amqPort }}"
     AMQP_USER: "{{ .Values.crisalidBus.username }}"
-    AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
     NEO4J_URI: bolt://neo4j:${NEO4J_BOLT_PORT}
-    NEO4J_USER:  #keep empty if NEO4J_AUTH: none
-    NEO4J_PASSWORD:  #keep empty if NEO4J_AUTH: none
     NEO4J_USER: ${NEO4J_USER}
-    NEO4J_PASSWORD: ${NEO4J_PASSWORD}
     ES_ENABLED: false
-    ES_HOST: http://localhost
-    ES_PORT: 9200
-    ES_USER: elastic
-    ES_PASSWORD: elastic
-    ORG_REGISTRY_URL: http://crisalid-org-registry:3000
+    ORG_REGISTRY_URL: http://whatever:3000
+  sensitive:
+      AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
+      NEO4J_PASSWORD: "{{ .Values.neo4j.password }}"

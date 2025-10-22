@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ tpl .Values.ikg.fullName $ }}
+  labels:
+    {{- (tpl ($.Values.ikg.commonLabels | toYaml ) $) | nindent 4 }}
+
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.ikg.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- (tpl ($.Values.ikg.commonLabels | toYaml ) $) | nindent 4 }}

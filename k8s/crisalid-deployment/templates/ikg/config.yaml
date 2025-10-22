@@ -1,0 +1,8 @@
+---
+{{- $configGenerator := dict
+"config" .Values.ikg.config
+"root" $
+"commonLabels" .Values.ikg.commonLabels
+"name" (tpl .Values.ikg.fullName .) }}
+
+{{- include "common.config.resources" $configGenerator}}
