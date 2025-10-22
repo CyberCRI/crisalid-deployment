@@ -61,7 +61,7 @@ crisalidBus:
   config:
     nonSensitive:
       RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit load_definitions {{.Values.crisalidBus.definitionsDir}}/definitions.json
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '-rabbit load_definitions "{{.Values.crisalidBus.definitionsDir}}/definitions.json"'
       # API_KEYS: ${SOVISUPLUS_GRAPHQL_API_KEY}
 
   livenessProbe:
