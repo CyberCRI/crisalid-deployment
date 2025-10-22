@@ -14,6 +14,8 @@ spec:
     metadata:
       labels:
         {{- (tpl ($.Values.apollo.commonLabels | toYaml ) $) | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/apollo/config.yaml") . | sha256sum }}
     spec:
       securityContext:
         {{- include "common.security.podSecurityContext.restricted" dict | nindent 8 }}
