@@ -31,9 +31,16 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.ikg.fullName $ }}
+
         securityContext:
           {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}
         livenessProbe:
         {{- .Values.ikg.livenessProbe | toYaml | nindent 10 }}
         readinessProbe:
         {{- .Values.ikg.readinessProbe | toYaml | nindent 10 }}
+        volumeMounts:
+        - name: ikg-tmp-logs
+          mountPath: /app/logs
+      volumes:
+      - name: ikg-tmp-logs
+        emptyDir: {}
