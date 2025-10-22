@@ -44,7 +44,9 @@ spec:
         {{- .Values.crisalidBus.readinessProbe | toYaml | nindent 10 }}
         volumeMounts:
         - name: definitions
-          mountPath: {{ .Values.crisalidBus.definitionsDir }}
+          mountPath: {{ .Values.crisalidBus.definitionsDir }}/definitions
+          subPath: definitions.json
+          readOnly: true
       volumes:
       - name: definitions
         configMap:
