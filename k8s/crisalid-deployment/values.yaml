@@ -46,8 +46,7 @@ apollo:
 crisalidBus:
   fullName: crisalid-bus
   definitionsDir: /etc/rabbitmq
-  # defaultPasswordHash: ccZY1+5tVHkoJbmKGXqUmY94e4DT30c/oUd2hSJMNjyhNRGj
-  defaultPasswordHash: totottiti
+  defaultPasswordHash: ccZY1+5tVHkoJbmKGXqUmY94e4DT30c/oUd2hSJMNjyhNRGj
   image:
     repository: rabbitmq
     tag: 3-management
