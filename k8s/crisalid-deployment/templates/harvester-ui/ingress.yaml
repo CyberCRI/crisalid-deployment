@@ -1,0 +1,26 @@
+{{- if .Values.harvester.ui.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ tpl .Values.harvester.ui.fullName $ }}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-traefik
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-ip-allow-list-with-office@kubernetescrd
+spec:
+  rules:
+    - host: {{ .Values.harvester.ui.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.harvester.ui.fullName }}
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - {{ .Values.harvester.ui.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.harvester.ui.ingress.hostname }}
+{{- end }}

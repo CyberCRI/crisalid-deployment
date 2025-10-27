@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ tpl .Values.harvester.ui.fullName $ }}
+  labels:
+    {{- (tpl ($.Values.harvester.ui.commonLabels | toYaml ) $) | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- (tpl ($.Values.harvester.ui.commonLabels | toYaml ) $) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- (tpl ($.Values.harvester.ui.commonLabels | toYaml ) $) | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/ikg/config.yaml") . | sha256sum }}
+    spec:
+      securityContext:
+        {{- include "common.security.podSecurityContext.restricted" dict | nindent 8 }}
+
+      containers:
+      - name: ikg
+      {{- with $.Values.harvester.ui.image }}
+        image: {{ tpl (printf "%s:%s" .repository .tag) $ }}
+      {{- end }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: {{ .Values.harvester.ui.httpPort }}
+            name: http
+
+        envFrom:
+        - configMapRef:
+            name: {{ tpl .Values.harvester.ui.fullName $ }}
+        - secretRef:
+            name: {{ tpl .Values.harvester.ui.fullName $ }}
+        securityContext:
+          {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}
+        livenessProbe:
+        {{- .Values.harvester.ui.livenessProbe | toYaml | nindent 10 }}
+        readinessProbe:
+        {{- .Values.harvester.ui.readinessProbe | toYaml | nindent 10 }}
+        volumeMounts:
+        - name: ikg-tmp-logs
+          mountPath: /code/logs
+      volumes:
+      - name: ikg-tmp-logs
+        emptyDir: {}

@@ -150,7 +150,7 @@ harvester:
     config:
       nonSensitive:
         APP_ENV: DEV
-        API_HOST: http://localhost:8000
+        API_HOST: "{{.Values.harvester.ui.ingress.hostname }}"
         API_PREFIX: /api
         API_VERSION: v1
         AMQP_ENABLED: false

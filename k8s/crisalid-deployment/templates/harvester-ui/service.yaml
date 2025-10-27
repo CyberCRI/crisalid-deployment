@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ tpl .Values.harvester.ui.fullName $ }}
+  labels:
+    {{- (tpl ($.Values.harvester.ui.commonLabels | toYaml ) $) | nindent 4 }}
+
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.harvester.ui.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- (tpl ($.Values.harvester.ui.commonLabels | toYaml ) $) | nindent 4 }}
