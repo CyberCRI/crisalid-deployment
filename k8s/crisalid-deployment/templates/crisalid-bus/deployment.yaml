@@ -16,6 +16,8 @@ spec:
         {{- (tpl ($.Values.crisalidBus.commonLabels | toYaml ) $) | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/crisalid-bus/config.yaml") . | sha256sum }}
+        checksum/definitions: {{ include (print $.Template.BasePath "/crisalid-bus/definitions.yaml") . | sha256sum }}
+        checksum/rabbitmq-configuration: {{ include (print $.Template.BasePath "/crisalid-bus/rabbitmq-configuration.yaml") . | sha256sum }}
     spec:
       securityContext:
         {{- include "common.security.podSecurityContext.restricted" (dict "user" 999) | nindent 8 }}
