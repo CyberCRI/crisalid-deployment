@@ -27,10 +27,6 @@ spec:
       {{- end }}
         imagePullPolicy: IfNotPresent
         command: {{ .Values.harvester.worker.command | toJson }}
-        ports:
-          - containerPort: {{ .Values.harvester.worker.httpPort }}
-            name: http
-
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.harvester.worker.fullName $ }}
