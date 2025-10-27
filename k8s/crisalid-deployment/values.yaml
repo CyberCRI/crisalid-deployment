@@ -127,3 +127,69 @@ ikg:
     sensitive:
       AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
       NEO4J_PASSWORD: "{{ .Values.neo4j.password }}"
+
+harvester:
+  dbName: crisalid_harvester
+  dbUser: crisalid
+  dbHost: dev-lab-projects-backend.postgres.database.azure.com
+  redisHost: redis://crisalid-harvester:6379
+  ui:
+    fullName: harvester-ui
+    image:
+      repository: crisalidesr/svp-harvester
+      tag: latest
+    httpPort: 8000
+    commonLabels:
+      app.kubernetes.io/name: harvester-ui
+      app.kubernetes.io/part-of: crisalid
+      app.kubernetes.io/managed-by: Helm
+    ingress:
+      enabled: true
+      hostname: harvester-ui.k8s.lp-i.dev
+    command: ["/bin/bash", "-c", "uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+    config:
+      nonSensitive:
+        APP_ENV: DEV
+        API_HOST: http://localhost:8000
+        API_PREFIX: /api
+        API_VERSION: v1
+        AMQP_ENABLED: false
+        DB_NAME: "{{ .Values.harvester.dbName }}"
+        DB_USER: "{{ .Values.harvester.dbUser }}"
+        REDIS_URL: "{{ .Values.harvester.redisHost }}"
+        # SCANR_ES_HOST: "{{ .Values.harvester.scanrEsHost }}"
+        # SCANR_ES_USER: "{{ .Values.harvester.scanrEsUser }}"
+        # SVP_JEL_PROXY_URL: http://svp-jel-proxy:3030/jel/sparql
+      sensitive:
+        SCANR_ES_PASSWORD: "{{ .Values.harvester.scanrEsPassword }}"
+        DB_PASSWORD: "{{ .Values.harvester.dbPassword }}"
+  worker:
+    fullName: harvester-worker
+    image:
+      repository: crisalidesr/svp-harvester
+      tag: latest
+    commonLabels:
+      app.kubernetes.io/name: harvester-worker
+      app.kubernetes.io/part-of: crisalid
+      app.kubernetes.io/managed-by: Helm
+    command: ["bash", "-c", "alembic upgrade head && python -m app.amqp_listen"]
+    config:
+      nonSensitive:
+        APP_ENV: DEV
+        DB_HOST: harvester-db
+        DB_PORT: 5432
+        DB_NAME: "{{ .Values.harvester.dbName }}"
+        DB_USER: "{{ .Values.harvester.dbUser }}"
+        REDIS_URL: "{{ .Values.harvester.redisHost }}"
+        AMQP_ENABLED: true
+        AMQP_HOST: crisalid-bus
+        AMQP_PORT: "{{ .Values.crisalidBus.amqPort }}"
+        AMQP_USER: "{{ .Values.crisalidBus.username }}"
+        INNER_TASK_PARALLELISM_LIMIT: 20
+        INNER_TASK_QUEUE_LENGTH: 20
+        # SCANR_ES_HOST: "{{ .Values.harvester.scanrEsHost }}"
+        # SCANR_ES_USER: "{{ .Values.harvester.scanrEsUser }}"
+        # SVP_JEL_PROXY_URL: http://svp-jel-proxy:3030/jel/sparql
+      sensitive:
+        DB_PASSWORD: "{{ .Values.harvester.dbPassword }}"
+        AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
