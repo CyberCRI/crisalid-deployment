@@ -26,6 +26,7 @@ spec:
         image: {{ tpl (printf "%s:%s" .repository .tag) $ }}
       {{- end }}
         imagePullPolicy: IfNotPresent
+        command: {{ .Values.harvester.worker.command | toJson }}
         ports:
           - containerPort: {{ .Values.harvester.worker.httpPort }}
             name: http

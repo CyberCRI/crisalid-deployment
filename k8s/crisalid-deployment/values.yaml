@@ -154,6 +154,7 @@ harvester:
         API_PREFIX: /api
         API_VERSION: v1
         AMQP_ENABLED: false
+        DB_HOST: "{{ .Values.harvester.dbHost }}"
         DB_NAME: "{{ .Values.harvester.dbName }}"
         DB_USER: "{{ .Values.harvester.dbUser }}"
         REDIS_URL: "{{ .Values.harvester.redisHost }}"
@@ -176,7 +177,7 @@ harvester:
     config:
       nonSensitive:
         APP_ENV: DEV
-        DB_HOST: harvester-db
+        DB_HOST: "{{ .Values.harvester.dbHost }}"
         DB_PORT: 5432
         DB_NAME: "{{ .Values.harvester.dbName }}"
         DB_USER: "{{ .Values.harvester.dbUser }}"
