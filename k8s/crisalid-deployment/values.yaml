@@ -35,6 +35,9 @@ apollo:
     app.kubernetes.io/name: apollo
     app.kubernetes.io/part-of: crisalid
     app.kubernetes.io/managed-by: Helm
+  ingress:
+    enabled: true
+    hostname: apollo.k8s.lp-i.dev
   config:
     nonSensitive:
       APP_ENV: DEV
