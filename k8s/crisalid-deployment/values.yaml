@@ -100,9 +100,10 @@ ikg:
       AMQP_ENABLED: true
       AMQP_HOST: "{{ .Values.crisalidBus.fullName }}"
       AMQP_PORT: "{{ .Values.crisalidBus.amqPort }}"
+      AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
       AMQP_USER: "{{ .Values.crisalidBus.username }}"
       NEO4J_URI: bolt://neo4j:{{ .Values.neo4j.boltPort }}
-      NEO4J_USER: ${NEO4J_USER}
+      NEO4J_USER: "{{ .Values.neo4j.username }}"
       ES_ENABLED: false
       ORG_REGISTRY_URL: http://whatever:3000
     sensitive:
