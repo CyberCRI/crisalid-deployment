@@ -33,6 +33,8 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ tpl .Values.ikg.fullName $ }}
+        - secretRef:
+            name: {{ tpl .Values.ikg.fullName $ }}
         securityContext:
           {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}
         livenessProbe:
