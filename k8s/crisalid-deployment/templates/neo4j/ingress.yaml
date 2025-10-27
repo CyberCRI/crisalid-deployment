@@ -1,0 +1,26 @@
+{{- if .Values.neo4j.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ tpl .Values.neo4j.fullName $ }}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-traefik
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-ip-allow-list-with-office@kubernetescrd
+spec:
+  rules:
+    - host: {{ .Values.neo4j.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.neo4j.fullName }}
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - {{ .Values.neo4j.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.neo4j.ingress.hostname }}
+{{- end }}

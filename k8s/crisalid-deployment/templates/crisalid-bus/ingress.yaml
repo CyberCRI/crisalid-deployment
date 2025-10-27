@@ -1,0 +1,26 @@
+{{- if .Values.crisalidBus.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ tpl .Values.crisalidBus.fullName $ }}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-traefik
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-ip-allow-list-with-office@kubernetescrd
+spec:
+  rules:
+    - host: {{ .Values.crisalidBus.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.crisalidBus.fullName }}
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - {{ .Values.crisalidBus.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.crisalidBus.ingress.hostname }}
+{{- end }}

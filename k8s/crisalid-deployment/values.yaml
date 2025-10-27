@@ -4,6 +4,9 @@ neo4j:
     repository: neo4j
     tag: "5-community"
     pullPolicy: IfNotPresent
+  ingress:
+    enabled: true
+    hostname: neo4j.k8s.lp-i.dev
   httpPort: 7474
   boltPort: 7687
   commonLabels:
@@ -57,6 +60,9 @@ crisalidBus:
     repository: rabbitmq
     tag: 3-management
     pullPolicy: IfNotPresent
+  ingress:
+    enabled: true
+    hostname: crisalid-bus.k8s.lp-i.dev
   httpPort: 15672
   amqPort: 5672
   commonLabels:
@@ -95,6 +101,9 @@ ikg:
   image:
     repository: crisalidesr/crisalid-ikg
     tag: v0.24-dev
+  ingress:
+    enabled: true
+    hostname: ikg.k8s.lp-i.dev
   httpPort: 8000
   commonLabels:
     app.kubernetes.io/name: crisalid-ikg
