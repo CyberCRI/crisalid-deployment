@@ -1,0 +1,21 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ tpl .Values.crisalidBus.fullName $ }}-rabbitmq-configuration
+  labels:
+    {{- (tpl ($.Values.crisalidBus.commonLabels | toYaml ) $) | nindent 4 }}
+data:
+  {{- .Values.crisalidBus.configFileName | quote }}: |
+    # allow access to the guest user from anywhere on the network
+    ## https://www.rabbitmq.com/access-control.html#loopback-users
+    ## https://www.rabbitmq.com/production-checklist.html#users
+    loopback_users.guest = false
+
+    ## Send all logs to stdout/TTY. Necessary to see logs when running via
+    ## a container
+    log.console = true
+
+    ## Log level
+    log.level = debug
+
+    

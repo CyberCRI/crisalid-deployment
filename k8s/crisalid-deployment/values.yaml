@@ -54,7 +54,8 @@ apollo:
 crisalidBus:
   fullName: crisalid-bus
   username: user
-  definitionsDir: /etc/rabbitmq
+  configDir: /etc/rabbitmq
+  configFileName: rabbitmq.conf
   defaultPasswordHash: ccZY1+5tVHkoJbmKGXqUmY94e4DT30c/oUd2hSJMNjyhNRGj
   image:
     repository: rabbitmq
@@ -72,7 +73,8 @@ crisalidBus:
   config:
     nonSensitive:
       RABBITMQ_DEFAULT_USER: "{{ .Values.crisalidBus.username }}"
-      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '-rabbit load_definitions "{{.Values.crisalidBus.definitionsDir}}/definitions.json"'
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '-rabbit load_definitions "{{.Values.crisalidBus.configDir}}/definitions.json"'
+      RABBITMQ_CONFIG_FILE: '{{ printf "%s/%s" .Values.crisalidBus.configDir .Values.crisalidBus.configFileName }}'
       # API_KEYS: ${SOVISUPLUS_GRAPHQL_API_KEY}
     sensitive:
       RABBITMQ_DEFAULT_PASS: "{{ .Values.crisalidBus.password }}"

@@ -44,12 +44,17 @@ spec:
         {{- .Values.crisalidBus.readinessProbe | toYaml | nindent 10 }}
         volumeMounts:
         - name: definitions
-          mountPath: {{ printf "%s/definitions.json" .Values.crisalidBus.definitionsDir }}
+          mountPath: {{ printf "%s/definitions.json" .Values.crisalidBus.configDir }}
           subPath: definitions.json
+          readOnly: true
+        - name: config
+          mountPath: {{ printf "%s/%s" .Values.crisalidBus.configDir .Values.crisalidBus.configFileName }}
+          subPath: {{ .Values.crisalidBus.configFileName }}
           readOnly: true
       volumes:
       - name: definitions
         configMap:
-          # Provide the name of the ConfigMap containing the files you want
-          # to add to the container
           name: {{printf "%s-definitions" (tpl .Values.crisalidBus.fullName $) }}
+      - name: config
+        configMap:
+          name: {{printf "%s-rabbitmq-configuration" (tpl .Values.crisalidBus.fullName $) }}
