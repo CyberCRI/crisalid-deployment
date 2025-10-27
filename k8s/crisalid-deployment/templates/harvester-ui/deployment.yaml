@@ -21,7 +21,7 @@ spec:
         {{- include "common.security.podSecurityContext.restricted" dict | nindent 8 }}
 
       containers:
-      - name: ikg
+      - name: ui
       {{- with $.Values.harvester.ui.image }}
         image: {{ tpl (printf "%s:%s" .repository .tag) $ }}
       {{- end }}
