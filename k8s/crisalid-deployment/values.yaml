@@ -159,7 +159,10 @@ harvester:
         API_HOST: '{{ printf "https://%s" .Values.harvester.ui.ingress.hostname }}'
         API_PREFIX: /api
         API_VERSION: v1
-        AMQP_ENABLED: false
+        AMQP_ENABLED: true
+        AMQP_HOST: crisalid-bus
+        AMQP_PORT: "{{ .Values.crisalidBus.amqPort }}"
+        AMQP_USER: "{{ .Values.crisalidBus.username }}"
         DB_HOST: "{{ .Values.harvester.dbHost }}"
         DB_NAME: "{{ .Values.harvester.dbName }}"
         DB_USER: "{{ .Values.harvester.dbUser }}"
@@ -170,6 +173,7 @@ harvester:
       sensitive:
         SCANR_ES_PASSWORD: "{{ .Values.harvester.scanrEsPassword }}"
         DB_PASSWORD: "{{ .Values.harvester.dbPassword }}"
+        AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
   worker:
     fullName: harvester-worker
     image:
