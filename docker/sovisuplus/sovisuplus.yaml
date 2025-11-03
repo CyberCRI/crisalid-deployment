@@ -65,6 +65,8 @@ services:
       - ORCID_SCOPES=${ORCID_SCOPES}
       - ORCID_CLIENT_ID=${ORCID_CLIENT_ID}
       - ORCID_CLIENT_SECRET=${ORCID_CLIENT_SECRET}
+      - VOCABS_URL=${CRISALID_VOCAB_SEARCH_URL}
+      - NEXT_PUBLIC_AVAILABLE_VOCABS="${CRISALID_VOCAB_SEARCH_AVAILABLE_VOCABS:-jel,aat,acm,mesh}"
     depends_on:
       svp-db:
         condition: service_healthy
@@ -72,6 +74,7 @@ services:
         condition: service_healthy
     volumes:
       - ./config:/config:ro
+      - ./theme:/custom-theme:ro
     networks:
       - svp-network
       - crisalid-front
