@@ -95,14 +95,7 @@ crisalidBus:
     initialDelaySeconds: 20
     periodSeconds: 60
     timeoutSeconds: 10
-    exec:
-      command:
-        - rabbitmq-diagnostics
-        - check_port_connectivity
-    initialDelaySeconds: 30
-    periodSeconds: 20
-    timeoutSeconds: 3
-    failureThreshold: 10
+
 
 ikg:
   fullName: ikg
@@ -152,7 +145,7 @@ harvester:
     ingress:
       enabled: true
       hostname: harvester-ui.k8s.lp-i.dev
-    command: ["/bin/bash", "-c", "uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+    command: ["/bin/bash", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
     config:
       nonSensitive:
         APP_ENV: DEV
@@ -171,7 +164,7 @@ harvester:
         # SCANR_ES_USER: "{{ .Values.harvester.scanrEsUser }}"
         # SVP_JEL_PROXY_URL: http://svp-jel-proxy:3030/jel/sparql
       sensitive:
-        SCANR_ES_PASSWORD: "{{ .Values.harvester.scanrEsPassword }}"
+        # SCANR_ES_PASSWORD: "{{ .Values.harvester.scanrEsPassword }}"
         DB_PASSWORD: "{{ .Values.harvester.dbPassword }}"
         AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
   worker:
