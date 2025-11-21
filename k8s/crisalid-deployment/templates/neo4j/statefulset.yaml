@@ -1,11 +1,12 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ tpl .Values.neo4j.fullName $ }}
   labels:
     {{- (tpl ($.Values.neo4j.commonLabels | toYaml ) $) | nindent 4 }}
 spec:
+  serviceName: {{ tpl .Values.neo4j.fullName $ }}
   replicas: 1
   selector:
     matchLabels:
@@ -19,7 +20,6 @@ spec:
     spec:
       securityContext:
         {{- include "common.security.podSecurityContext.restricted" dict | nindent 8 }}
-
       containers:
       - name: neo4j
       {{- with $.Values.neo4j.image }}
@@ -38,3 +38,15 @@ spec:
             name: {{ tpl .Values.neo4j.fullName $ }}
         securityContext:
           {{- include "common.security.containerSecurityContext.restricted" dict | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/lib/neo4j/data
+          name: neo4j-data
+  volumeClaimTemplates:
+  - metadata:
+      name: neo4j-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: managed-csi-lrs-projects
+      resources:
+        requests:
+          storage: 2Gi
