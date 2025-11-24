@@ -32,7 +32,6 @@ ikg:
 harvester:
   dbName: crisalid_harvester
   dbUser: crisalid
-  dbHost: dev-lab-projects-backend.postgres.database.azure.com
   redisHost: redis://crisalid-harvester:6379
   ui:
     image:
