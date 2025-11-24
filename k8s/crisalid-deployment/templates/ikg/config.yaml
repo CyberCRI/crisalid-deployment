@@ -1,4 +1,5 @@
 ---
+{{- if .Values.ikg.enabled }}
 {{- $configGenerator := dict
 "config" .Values.ikg.config
 "root" $
@@ -6,3 +7,4 @@
 "name" (tpl .Values.ikg.fullName .) }}
 
 {{- include "common.config.resources" $configGenerator}}
+{{- end }}

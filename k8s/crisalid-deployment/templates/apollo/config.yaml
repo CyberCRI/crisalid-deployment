@@ -1,4 +1,5 @@
 ---
+{{- if .Values.apollo.enabled }}
 {{- $configGenerator := dict
 "config" .Values.apollo.config
 "root" $
@@ -6,3 +7,4 @@
 "name" (tpl .Values.apollo.fullName .) }}
 
 {{- include "common.config.resources" $configGenerator}}
+{{- end }}

@@ -1,3 +1,5 @@
+---
+{{- if .Values.crisalidBus.enabled }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -17,3 +19,4 @@ data:
 
     ## Log level
     log.console.level = debug
+{{- end }}

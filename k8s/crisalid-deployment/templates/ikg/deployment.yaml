@@ -1,4 +1,5 @@
 ---
+{{- if .Values.ikg.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,3 +48,4 @@ spec:
       volumes:
       - name: ikg-tmp-logs
         emptyDir: {}
+{{- end }}

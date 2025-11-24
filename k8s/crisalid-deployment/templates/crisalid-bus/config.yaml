@@ -1,4 +1,5 @@
 ---
+{{- if .Values.crisalidBus.enabled }}
 {{- $configGenerator := dict
 "config" .Values.crisalidBus.config
 "root" $
@@ -6,3 +7,4 @@
 "name" (tpl .Values.crisalidBus.fullName .) }}
 
 {{- include "common.config.resources" $configGenerator}}
+{{- end }}

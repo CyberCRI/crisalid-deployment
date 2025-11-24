@@ -1,0 +1,14 @@
+neo4j:
+  image:
+    tag: "5-community"
+  ingress:
+    enabled: false
+
+apollo:
+  image:
+    tag: "latest"
+  ingress:
+    enabled: false
+  config:
+    nonSensitive:
+      APP_ENV: DEV

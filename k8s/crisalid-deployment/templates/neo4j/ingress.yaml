@@ -1,3 +1,5 @@
+---
+{{- if .Values.neo4j.enabled }}
 {{- if .Values.neo4j.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -23,4 +25,5 @@ spec:
     - hosts:
         - {{ .Values.neo4j.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.neo4j.ingress.hostname }}
+{{- end }}
 {{- end }}

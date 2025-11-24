@@ -1,0 +1,50 @@
+neo4j:
+  image:
+    tag: "5-community"
+  ingress:
+    hostname: neo4j.k8s.lp-i.dev
+
+apollo:
+  image:
+    tag: "latest"
+  ingress:
+    hostname: apollo.k8s.lp-i.dev
+  config:
+    nonSensitive:
+      APP_ENV: DEV
+
+crisalidBus:
+  defaultPasswordHash: ccZY1+5tVHkoJbmKGXqUmY94e4DT30c/oUd2hSJMNjyhNRGj
+  image:
+    tag: 3-management
+  ingress:
+    hostname: crisalid-bus.k8s.lp-i.dev
+
+ikg:
+  image:
+    tag: v0.24-dev
+  ingress:
+    hostname: ikg.k8s.lp-i.dev
+  config:
+    nonSensitive:
+      APP_ENV: DEV
+
+harvester:
+  dbName: crisalid_harvester
+  dbUser: crisalid
+  dbHost: dev-lab-projects-backend.postgres.database.azure.com
+  redisHost: redis://crisalid-harvester:6379
+  ui:
+    image:
+      tag: latest
+    ingress:
+      hostname: harvester-ui.k8s.lp-i.dev
+    config:
+      nonSensitive:
+        APP_ENV: DEV
+  worker:
+    image:
+      tag: latest
+    config:
+      nonSensitive:
+        APP_ENV: DEV

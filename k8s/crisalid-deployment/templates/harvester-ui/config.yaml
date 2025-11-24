@@ -1,4 +1,5 @@
 ---
+{{- if .Values.harvester.ui.enabled }}
 {{- $configGenerator := dict
 "config" .Values.harvester.ui.config
 "root" $
@@ -6,3 +7,4 @@
 "name" (tpl .Values.harvester.ui.fullName .) }}
 
 {{- include "common.config.resources" $configGenerator}}
+{{- end }}

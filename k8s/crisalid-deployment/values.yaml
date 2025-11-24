@@ -1,12 +1,11 @@
 neo4j:
+  enabled: true
   fullName: neo4j
   image:
     repository: neo4j
-    tag: "5-community"
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
-    hostname: neo4j.k8s.lp-i.dev
   httpPort: 7474
   boltPort: 7687
   commonLabels:
@@ -28,10 +27,10 @@ neo4j:
       NEO4J_AUTH: "{{ .Values.neo4j.username }}/{{ .Values.neo4j.password }}"
 
 apollo:
+  enabled: true
   fullName: apollo
   image:
     repository: crisalidesr/crisalid-apollo
-    tag: "latest"
     pullPolicy: IfNotPresent
   httpPort: 4000
   commonLabels:
@@ -40,10 +39,8 @@ apollo:
     app.kubernetes.io/managed-by: Helm
   ingress:
     enabled: true
-    hostname: apollo.k8s.lp-i.dev
   config:
     nonSensitive:
-      APP_ENV: DEV
       NEO4J_URI: bolt://neo4j:{{ .Values.neo4j.boltPort }}
       NEO4J_USER: "{{ .Values.neo4j.username }}"
       ENABLE_API_KEYS: true
@@ -53,18 +50,16 @@ apollo:
       GRAPHQL_API_KEYS: "{{ .Values.apollo.apiKey }}"
 
 crisalidBus:
+  enabled: false
   fullName: crisalid-bus
   username: user
   configDir: /etc/rabbitmq
   configFileName: rabbitmq.conf
-  defaultPasswordHash: ccZY1+5tVHkoJbmKGXqUmY94e4DT30c/oUd2hSJMNjyhNRGj
   image:
     repository: rabbitmq
-    tag: 3-management
     pullPolicy: IfNotPresent
   ingress:
     enabled: true
-    hostname: crisalid-bus.k8s.lp-i.dev
   httpPort: 15672
   amqPort: 5672
   commonLabels:
@@ -99,13 +94,12 @@ crisalidBus:
 
 
 ikg:
+  enabled: false
   fullName: ikg
   image:
     repository: crisalidesr/crisalid-ikg
-    tag: v0.24-dev
   ingress:
     enabled: true
-    hostname: ikg.k8s.lp-i.dev
   httpPort: 8000
   commonLabels:
     app.kubernetes.io/name: crisalid-ikg
@@ -113,7 +107,6 @@ ikg:
     app.kubernetes.io/managed-by: Helm
   config:
     nonSensitive:
-      APP_ENV: DEV
       API_PREFIX: /api
       API_VERSION: v1
       AMQP_ENABLED: true
@@ -129,15 +122,11 @@ ikg:
       NEO4J_PASSWORD: "{{ .Values.neo4j.password }}"
 
 harvester:
-  dbName: crisalid_harvester
-  dbUser: crisalid
-  dbHost: dev-lab-projects-backend.postgres.database.azure.com
-  redisHost: redis://crisalid-harvester:6379
   ui:
+    enabled: false
     fullName: harvester-ui
     image:
       repository: crisalidesr/svp-harvester
-      tag: latest
     httpPort: 8000
     commonLabels:
       app.kubernetes.io/name: harvester-ui
@@ -145,11 +134,9 @@ harvester:
       app.kubernetes.io/managed-by: Helm
     ingress:
       enabled: true
-      hostname: harvester-ui.k8s.lp-i.dev
     command: ["/bin/bash", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
     config:
       nonSensitive:
-        APP_ENV: DEV
         API_HOST: '{{ printf "https://%s" .Values.harvester.ui.ingress.hostname }}'
         API_PREFIX: /api
         API_VERSION: v1
@@ -169,10 +156,10 @@ harvester:
         DB_PASSWORD: "{{ .Values.harvester.dbPassword }}"
         AMQP_PASSWORD: "{{ .Values.crisalidBus.password }}"
   worker:
+    enabled: false
     fullName: harvester-worker
     image:
       repository: crisalidesr/svp-harvester
-      tag: latest
     commonLabels:
       app.kubernetes.io/name: harvester-worker
       app.kubernetes.io/part-of: crisalid
@@ -180,7 +167,6 @@ harvester:
     command: ["bash", "-c", "alembic upgrade head && python -m app.amqp_listen"]
     config:
       nonSensitive:
-        APP_ENV: DEV
         DB_HOST: "{{ .Values.harvester.dbHost }}"
         DB_PORT: 5432
         DB_NAME: "{{ .Values.harvester.dbName }}"

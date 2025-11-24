@@ -1,3 +1,5 @@
+---
+{{- if .Values.crisalidBus.enabled }}
 {{- if .Values.crisalidBus.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -23,4 +25,5 @@ spec:
     - hosts:
         - {{ .Values.crisalidBus.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.crisalidBus.ingress.hostname }}
+{{- end }}
 {{- end }}

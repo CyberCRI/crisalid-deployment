@@ -1,4 +1,5 @@
 ---
+{{- if .Values.ikg.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -15,3 +16,4 @@ spec:
       name: http
   selector:
     {{- (tpl ($.Values.ikg.commonLabels | toYaml ) $) | nindent 4 }}
+{{- end }}

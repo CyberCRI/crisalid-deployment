@@ -1,4 +1,5 @@
 ---
+{{- if .Values.neo4j.enabled }}
 {{- $configGenerator := dict
 "config" .Values.neo4j.config
 "root" $
@@ -6,3 +7,4 @@
 "name" (tpl .Values.neo4j.fullName .) }}
 
 {{- include "common.config.resources" $configGenerator}}
+{{- end }}
