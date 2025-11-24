@@ -46,10 +46,11 @@ apollo:
       APP_ENV: DEV
       NEO4J_URI: bolt://neo4j:{{ .Values.neo4j.boltPort }}
       NEO4J_USER: "{{ .Values.neo4j.username }}"
-      ENABLE_API_KEYS: false
+      ENABLE_API_KEYS: true
     sensitive:
       NEO4J_PASSWORD: "{{ .Values.neo4j.password }}"
-      # API_KEYS: ${SOVISUPLUS_GRAPHQL_API_KEY}
+      API_KEYS: "{{ .Values.apollo.apiKey }}"
+      GRAPHQL_API_KEYS: "{{ .Values.apollo.apiKey }}"
 
 crisalidBus:
   fullName: crisalid-bus
